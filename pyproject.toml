@@ -1,0 +1,8 @@
+[project]
+name = "flappy-bird-git-workshop"
+version = "0.1.0"
+description = "Flappy Bird Git Workshop - Learn Git while building a game"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = []
+
