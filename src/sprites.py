@@ -33,8 +33,8 @@ class Bird(pygame.sprite.Sprite):
         self.mask = pygame.mask.from_surface(self.image)
 
         self.rect = self.image.get_rect()
-        self.rect[0] = SCREEN_WIDTH / 6
-        self.rect[1] = SCREEN_HEIGHT / 2
+        self.rect[0] = SCREEN_WIDTH // 6
+        self.rect[1] = SCREEN_HEIGHT // 2
 
     def update(self):
         self.current_image = (self.current_image + 1) % 3
@@ -54,8 +54,8 @@ class Bird(pygame.sprite.Sprite):
         self.current_image = 0
         self.image = self.images[self.current_image]
         self.mask = pygame.mask.from_surface(self.image)
-        self.rect[0] = SCREEN_WIDTH / 6
-        self.rect[1] = SCREEN_HEIGHT / 2
+        self.rect[0] = SCREEN_WIDTH // 6
+        self.rect[1] = SCREEN_HEIGHT // 2
 
 
 class Pipe(pygame.sprite.Sprite):

@@ -13,6 +13,9 @@ from src.game import (
     check_collisions,
     get_random_pipes,
     reset_game,
+    update_score,
+    draw_score,
+    load_number_sprites,
 )
 
 pygame.init()
@@ -40,6 +43,7 @@ for i in range(2):
     pipe_group.add(pipes[1])
 
 clock = pygame.time.Clock()
+number_sprites = load_number_sprites()
 
 # Main game loop - restarts after each loss
 # BUG: score is initialized outside the loop, so it doesn't reset on restart
@@ -59,9 +63,15 @@ while True:
     ground_group.update()
     pipe_group.update()
 
+    # Update score when bird passes pipes
+    score, passed_pipes = update_score(bird, pipe_group, score, passed_pipes)
+
     bird_group.draw(screen)
     pipe_group.draw(screen)
     ground_group.draw(screen)
+
+    # Draw score on top using number sprites
+    draw_score(screen, score, number_sprites)
 
     pygame.display.update()
 

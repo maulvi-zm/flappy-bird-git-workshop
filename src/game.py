@@ -103,3 +103,58 @@ def reset_game(bird, ground_group, pipe_group):
         pipe_group.add(pipes[1])
 
     return set()  # Return passed_pipes set
+
+
+def update_score(bird, pipe_group, score, passed_pipes):
+    """Update score when bird passes a pipe. Returns new score and passed_pipes set."""
+    bird_x = bird.rect[0] + bird.rect[2]  # Bird's right edge
+    pipe_sprites = pipe_group.sprites()
+    
+    # Group pipes by pair_id
+    pipe_pairs = {}
+    for pipe in pipe_sprites:
+        if pipe.pair_id is not None:
+            if pipe.pair_id not in pipe_pairs:
+                pipe_pairs[pipe.pair_id] = []
+            pipe_pairs[pipe.pair_id].append(pipe)
+    
+    # Check each pipe pair
+    for pair_id, pipes in pipe_pairs.items():
+        if len(pipes) >= 2 and pair_id not in passed_pipes:
+            # Use the bottom pipe (non-inverted) to get x position
+            bottom_pipe = next((p for p in pipes if not p.inverted), pipes[0])
+            pipe_x = bottom_pipe.rect[0]
+            pipe_right_edge = pipe_x + PIPE_WIDTH
+            
+            # Score when bird's right edge passes the pipe's right edge
+            if bird_x > pipe_right_edge:
+                passed_pipes.add(pair_id)
+                score += 1
+    
+    return score, passed_pipes
+
+
+def load_number_sprites():
+    """Load number sprite images (0-9)."""
+    number_sprites = {}
+    for i in range(10):
+        number_sprites[i] = pygame.image.load(f"assets/sprites/{i}.png").convert_alpha()
+    return number_sprites
+
+
+def draw_score(screen, score, number_sprites):
+    """Draw the score on the screen using number sprites."""
+    score_str = str(score)
+    y_pos = 50
+    
+    # Calculate total width of all digits
+    total_width = sum(number_sprites[int(digit)].get_width() for digit in score_str)
+    start_x = (SCREEN_WIDTH - total_width) // 2
+    
+    # Draw each digit sprite
+    current_x = start_x
+    for digit_char in score_str:
+        digit = int(digit_char)
+        sprite = number_sprites[digit]
+        screen.blit(sprite, (current_x, y_pos))
+        current_x += sprite.get_width()
